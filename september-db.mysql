@@ -1,0 +1,98 @@
+use r34ct;
+select distinct users1.name, users1.age from users1;
+
+select avg(users1.age), sum(users1.age) from users1;
+
+select avg(age) from users
+union
+select sum(age) from users;
+
+select id, price, price*2 as doublePrice from cars;
+select * from users;
+
+select concat('Yo, my name ',name, ' I`m ',age,' my gender ',gender) from users1;
+select * from users1 where concat('Yo, my name ',name, ' I`m ',age,' my gender ',gender)='Yo, my name Ihnat I`m 99 my gender male';
+
+select * from users1 where name > '';
+
+select * from users where age = id+20;
+
+select lower(name) from users;
+select upper(name) from users;
+
+select * from application
+join client on client.idClient = application.Client_idClient
+where FirstName='Taras';
+
+select client.*, application.CreditState from application
+join client on client.idClient = application.Client_idClient
+where FirstName='Roman';
+
+select * from client
+join r34ct.application a on client.idClient = a.Client_idClient
+join r34ct.department d on d.idDepartment = client.Department_idDepartment;
+
+create table cities(
+    id int primary key auto_increment,
+    city varchar(20) not null
+);
+
+create table users1(
+    id int primary key auto_increment,
+    name varchar(20) not null,
+    age int not null,
+    city_id int null,
+    foreign key (city_id) references cities(id)
+);
+
+select * from users1
+join cities c on c.id = users1.city_id
+where city='kyiv';
+
+select * from users1 left join cities c on c.id = users1.city_id;
+select * from users1 right join cities c on c.id = users1.city_id;
+
+# hw in work
+
+# select * from cars;
+# select count(*), model from cars group by model;
+# select count(*), model from cars group by model order by count(*) desc limit 1;
+
+# select max(price), count(*), model from cars group by model;
+
+create table skills(
+    id int primary key auto_increment,
+    skills varchar(20) not null
+);
+
+create table users2(
+    id int primary key auto_increment,
+    username varchar(50) not null,
+    password varchar(255) not null
+);
+
+create table users_skill(
+#     id int primary key  auto_increment,
+    user_id int not null,
+    skill_id int not null,
+#     primary key (id),
+    primary key (user_id,skill_id),
+    foreign key (user_id) references users2(id),
+    foreign key (skill_id) references skills(id)
+);
+
+select p.*, s.skills from users2
+join users_skill us on users2.id = us.user_id
+join skills s on s.id = us.skill_id
+join profile p on users2.id = p.user_id
+where skill_id>0;
+
+create table profile(
+    id int primary key auto_increment,
+    name varchar(25) not null,
+    age int not null,
+    user_id int not null unique,
+    foreign key (user_id) references  users2(id)
+);
+
+#REMEMER FOR NORMAL FORMAT TABLES FORMATING
